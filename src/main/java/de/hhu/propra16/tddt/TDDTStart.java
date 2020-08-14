@@ -21,9 +21,6 @@ public class TDDTStart extends Application {
 		try {
 
 			// Load root layout from fxml file.
-			URL rootUrl = getClass().getResource("/TextScreen.fxml");
-			System.out.println(rootUrl.getFile());
-			
 			BorderPane base = FXMLLoader.load(getClass().getResource("/TextScreen.fxml"));
 
 			// Show the scene containing the root layout.
