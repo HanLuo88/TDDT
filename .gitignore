@@ -12,3 +12,20 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+/bin/
+/.gradle/
+/build/
+/.settings/
+.classpath
+.project
+build.fxbuild
+/.settings/
+/.gradle/
+/build/
+.idea/
+*.iml
+out/
+.gradle/2.14/taskArtifacts/fileHashes.bin
+.gradle/2.14/taskArtifacts/cache.properties.lock
+/doc/

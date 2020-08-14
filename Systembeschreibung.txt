@@ -1,0 +1,308 @@
+Systembeschreibung:
+
+Welche Klassen gibt es?
+ - ConfigReader
+ - Console
+ - Information
+ - MainScreenController 
+ - Program
+ - TDDTStart
+ - Timer
+ - Tracking
+ - TrackingScreenController
+ 
+Desweiteren gibt es noch 2 .fxml Dokumente
+ - TextScreen
+ - TrackingScreen
+in welchen sich das jeweilige Layout für das Hauptfenster bzw. das Trackingfenster
+befindet.
+ 
+ Interaktion der Klassen untereinander:
+ 
+TDDTStart:
+ Zunaechst wird durch das Ausfuehren der Klasse TDDTStart das Layout des Programms
+ aus der Datei TextScreen.fxml geladen, danach wird darauf basierend eine neue Scene
+ erstellt und zusammen mit dem Fenstertitel der Stage hinzugefuegt, bevor diese dann
+ gezeigt wird.
+ 
+MainScreenController:
+	 Der MainScreenController weist den GUI Elementen (Menue, Buttons, TextAreas und
+	 TextField) Variablen zu um diese spaeter in den Methoden nutzen zu können.
+ 	Methoden:
+ 	public void handleMenuItem(ActionEvent e)
+ 		Hier wird erst mit Hilfe der Klasse Console aus der vorher zugewiesenen TextArea
+ 		console ein Outputstream initiiert, um eine Terminal-Ausgabe zu simulieren. Dazu
+ 		dient der PrintStream out, welchem der OutputStream zugewiesen wird.
+ 		Die ActionEvents werden wie folgt behandelt:
+ 	neu:
+ 		die linke und rechte TextArea werden geleert.
+ 	catalog:
+ 		die Moeglichkeit in der linken TextArea einen Code zu schreiben wird
+ 		deaktiviert, ein neuer DirectoryChooser wird mit dem Pfad ./Task/ als
+ 		initialDirectory initiiert und bietet die Moeglichkeit eine Aufgabe zu wählen
+ 		erstellt eine neue CLasse und einen neuen Test basierend auf den von in
+ 		ConfigReader gelesenen Daten.
+ 	load:
+ 		fuehrt loadMethod() aus, welche die GUI resetted und die Daten aus der
+		config.txt ausliest.
+ 	saveTest:
+ 		speichert, wenn eine Uebung ausgewaehlt ist, den Test.
+ 	saveCode:
+ 		speichert, wenn eine Uebung ausgewaehlt ist, den Code.
+ 	exit:
+ 		beendet das Programm.
+ 		
+ 	public void handleButton(ActionEvent e)
+  		Hier wird erst mit Hilfe der Klasse Console aus der vorher zugewiesenen TextArea
+ 		console ein Outputstream initiiert, um eine Terminal-Ausgabe zu simulieren. Dazu
+ 		dient der PrintStream out, welchem der OutputStream zugewiesen wird.
+ 		Die ActionEvents werden wie folgt behandelt:
+ 	runCode:
+ 		speichert zunaechst den Code, compiliert diesen und führt danach die Methode 
+		test() aus der Klasse Program aus, sofern hier keine Fehler aufgetreten sind.
+ 		Wurden die Tests bestanden wird der Button "next" auf der Code Seite aktiviert
+ 		und die Code TextArea deaktiviert.
+ 	runTest:
+ 	 	speichert zunaechst den Test, compiliert diesen und führt danach die Methode 
+		test() aus der Klasse Program aus, sofern hier keine Fehler aufgetreten sind.
+ 		Ist der Test fehlgeschlagen wird der Button "next" auf der Test Seite aktiviert
+ 		und die Test TextArea deaktiviert.
+ 	run:
+ 		Compiliert den Code/Test und führt diesen dann aus.
+ 	clear:
+ 		Leert die Console
+ 	fieldClear:
+ 		Leert das TextField in welchem Übergabeparameter eingegeben werden koennen.
+ 	nextTest:
+ 		Wechselt vom Test schreiben zum Code schreiben. Dabei wird der Test gespeichert
+ 		und ausgefuehrt. Schlaegt dieser Fehl wird der Inhalt der rechten TextArea dem
+ 		Tracking Objekt MyProgress zur TestList hinzugefuegt.
+ 	nextCode:
+ 	 	Wechselt vom Code schreiben zum Test schreiben. Dabei wird der Code gespeichert
+ 		und ausgefuehrt. Besteht dieser den Test wird der Inhalt der rechten TextArea dem
+		Tracking Objekt MyProgress zur CodeList hinzugefuegt.
+ 	Tracking:
+ 		Oeffnet das Tracking Fenster.
+ 	
+ 	public void timerLapsed()
+ 		ist der Timer abgelaufen wird vom aktuell aktivem Fenster in das inaktive
+ 		Fenster gewechselt, sodass der Nutzer gezwungen ist seine aktuelle Phase zu
+ 		beenden und entweder mit dem Code oder dem Test weiter zu machen.
+ 		
+ 	private void disableTest()
+ 		setzt die Werte aller relevanten Variablen so, dass die Testphase beendet wird
+ 		
+ 	private void disableCode()
+ 		setzt die Werte aller relevanten Variablen so, dass die Codephase beendet wird
+ 		
+ 	private void showTrackingWindow()
+ 		initialisiert ein neus Fenster für die Tracking GUI
+ 		
+		
+Timer:
+ 	public long startTimer()
+ 		startet den Timer bei System.currentTimeMillis()
+ 	
+ 	public long timePassed()
+ 		berechnet die Differenz zwischen Start und Endzeit des Timers und gibt diese
+ 		mit der Variable timePassed zurueck.
+ 	
+ 	public boolean stopTimer()
+ 		stoppt den Timer indem die Variable timerRuns auf false gesetzt wird
+ 	
+ 	public long resetTimer()
+ 		resettet den Timer indem die Werte der Start und Endzeit auf 0 gesetzt werden
+ 		
+ 	public long setTime(long timePassed)
+ 		setzt die Variable timePassed auf einen beliebigen Wert des Typen long.
+ 		
+ 	public long getTime()
+ 		gibt den aktuellen Wert der Variable timePassed zurueck.
+ 		
+ 		
+ConfigReader:
+  Klasse um die Konfiguration aus einer Datei config.txt zu lesen, welche sich in einem
+  Unterordner von ./Tasks/ befindet.
+  
+	public ConfigReader(String task)
+		Bekommt einen String übergeben, welcher dem Dateipfad filePathToTask angehaengt wird.
+		es wird der Path filePathToConfig erstellt, welcher dem vorher erstellten filePathToTask
+		den suffix "config.txt" anhaengt.
+		Abschliessend wird versucht an diesem Ort die config.txt auszulesen und der String Liste
+		contentOfConfig hinzu zu fuegen.
+		Es wird ein Error ausgegeben, sollte keine config.txt vorhanden sein.
+		
+	public String getTask()
+		getter Methode um den aktuellen Task zu erhalten
+		
+	public String getPath()
+		getter Methode um den aktuellen Dateipfad zu erhalten
+		
+	public String getProgramName()
+		liest den Namen des Programms aus der contentOfConfig Liste an Position 1 aus, fuegt diesen
+		dem String lineWithInfo hinzu, aus welchem danach der Name mit lineWithInfo.substring(13)
+		ausgelesen wird.
+		
+	public String getTestName()
+		liest den Namen des Tests aus der contentOfConfig Liste an Position 0 aus, fuegt diesen
+		dem String lineWithInfo hinzu, aus welchem danach der Name mit lineWithInfo.substring(10)
+		ausgelesen wird.
+		
+	public boolean withBabysteps()
+		fuegt dem String lineWithInfo den Inhalt von contentOfConfig an Position 2 hinzu, der
+		Substring lineWithInfo.substring(11, 15) wird dann zum String babysteps hinzugefuegt, aus
+		welchem dann ein Boolean Wert geparsed wird um zu bestimmen ob Babysteps aktiviert oder
+		deaktiviert sind.
+
+	public long timeOfBabysteps()
+		fuegt dem String lineWithInfo den Inhalt von contentOfConfig an Position 3 hinzu, der
+		Substring lineWithInfo.substring(19) wird dann zum String duration hinzugefuegt, aus
+		welchem dann ein Long Wert geparsed wird um die Dauer der Babysteps zu erhalten.
+		
+Console:
+  Die Klasse Console beinhaltet eine TextArea und erweitert OutputStream.
+	
+	public Console(TextArea txtArea)
+		Beim Aufruf wird hier der TextArea aus der Klasse Console die uebergebene TextArea
+		zugewiesen.
+	
+	public void write(int b)
+		fügt der TextArea eine Ausgabe basierend auf dem String.valueOf((char) b) hinzu.
+ 
+Information:
+  Diese Klasse beinhaltet den Datentyp Information, in welchem testName, codeName und filePath
+  gespeichert sind.
+	public String getTestFileName()
+		gibt beim Aufruf den Namen der Testdatei wieder
+		
+	public String getCodeFileName()
+		gibt beim Aufruf den Namen der Code Datei wieder
+	
+	public String getPathToFiles()
+		gibt beim Aufruf den Dateipfad von Test und Code zurueck
+		
+		
+Program:
+  Die Klasse Program compiliert sowohl den Java- als auch den JUnit-Quellcode und fuehrt diesen aus.
+	public void compile()
+		Die Methode compiliert den Code, wartet bis dies getan ist, liest ein Programm aus einer Datei
+		im Pfad von codeFilePath (Error wenn der Pfad nicht existiert), wandelt den Quellcode in einen
+		String um, erstellt aus diesen Daten eine CompilationUnit, compiliert das Programm imaginär,
+		nimmt dan das Resultat entgegen und gibt schliesslich alle Fehlermeldungen aus, sollte es welche
+		gegeben haben.
+		
+	public void run(String args)
+		Fuer den Fall, dass ein Resultat vorhanden ist (!=null) und es keine Fehler gab wird das Programm
+		mit zusammen mit dem String agrs als Uebergabeparameter ausgeführt. Der zweite try & catch Block
+		gibt die Ausgabe die normalerweise auf dem Terminal erscheint auf der eigenen Console von TDDT aus.
+		
+	public int test()
+		liest Code und Test aus den Pfaden testFilePath und codeFilePath, gibt eine Fehlermeldung aus wenn
+		ein Pfad nicht gefunden wurde. Wandelt danach Test und Code in zwei seperat Strings um (contentTestInString
+		und contentCodeInString) und erstellt aus diesen Daten eine neue CompilationUnit. Dann werden die Tests
+		ausgefuehrt, die Resultate gespeichert und eventuell aufgetretene Fehler ausgegeben. Selbiges geschieht mit
+		den Resultaten vom Testen. Die Anzahl der Fehler wird in der Integer Variable numberFailed gespeichert, ist
+		diese = 0 Wird eine Benachrichtigung ausgegeben, dass alle Tests bestanden wurden. Sollten jedoch ein oder mehr
+		Fehler aufgetreten sein wird die Anzahl der fehlgeschlagen, ignorierten und erfolgreichen Tests ausgegeben.
+	
+	private void println(InputStream inStream)
+		liest einen InputStream aus dem Terminal und speichert diesen um ihn auf der TDDT eigenen Console ausgeben
+		zu können.
+
+ 
+Tracking:
+  Die Klasse enthaelt 4 Listen fuer Code und Test(String) sowie todeTime und testTime(int)
+	public void addToCodeTime(int time)
+		fügt der Liste codeTime den uebergebenen Integer time hinzu
+		
+	public void addToTestTime(int time)
+		fügt der Liste testTime den uebergebenen Integer time hinzu
+		
+	public int getCodeTime(int index)
+		getter Methode um den Index der codeTime zu erhalten
+		
+	public int getTestTime(int index)
+		getter Methode um den Index der testTime zu erhalten
+		
+	public void addToCodeList(String codefile)
+		fuegt der codeList den uebergebene String codefile zu
+		
+	public void addToTestList(String codefile)
+		fuegt der testList den uebergebene String testfile zu
+
+	public String getCode(int index)
+		getter um den Eintrag in der codeList am uebergebenen Index zu erhalten
+		
+	public String getTest(int index)
+		getter um den Eintrag in der testList am uebergebenen Index zu erhalten
+	
+	public String getTestSize(int index)
+		getter um die Anzahl der Elemente der testList zu erhalten
+	
+	public String getCodeSize(int index)
+		getter um die Anzahl der Elemente der codeList zu erhalten
+	
+	public void clearLists()
+		Methode um beide Listen zu leeren
+		
+TrackingScreenController:
+   Der TrackingScreenController weist den GUI Elementen (Label, Buttons, TextAreas)
+   Variablen zu um diese spaeter in den Methoden nutzen zu können.
+   
+	public void setMain(MainScreenController main)
+		hier wird der MainScreenController main aus der Klasse TrackingScreenController
+		auf den uebergebenen MainScreenController gesetzt
+		
+	public void handleButton(ActionEvent e)
+		Hier werden mit verschiedenen if-Abfragen die Funktionen der Buttons bedacht:
+		test:
+			ruft die Funktion public void defaultTest() auf.
+				public void defaultTest()
+					laedt als standard Test den Eintrag main.MyProgress.getTest(0) in
+					die linke TextArea und den Eintrag main.MyProgress.getTest(1) in
+					die rechte TextArea. Ist kein Test vorhanden wird eine Fehlermeldung
+					mit "Test[0] bzw. Test[1] doesn't exist." ausgegeben.
+					MyProgress ist bekannt als Tracking Objekt aus
+					MainScreenController.
+					
+		code:
+			ruft die Funktion public void defaultCode() auf.
+				public void defaultCode()
+					laed als standard Code den Eintrag main.MyProgress.getCode(0) in
+					die linke TextArea, und den Eintrag main.MyProgress.getCode(1) in
+					die rechte TextArea. Ist kein Code vorhanden wird eine Fehlermeldung
+					mit "Code[0] bzw. Code[1] doesn't exist." ausgegeben.
+					MyProgress ist bekannt als Tracking Objekt aus
+					MainScreenController.
+		next:
+			fragt ab ob MainScreenController.config.withBabysteps() oder
+			MainScreenController.config.withoutBabysteps() zutrifft und setzt den Wert vom
+			String withBSteps auf "with" bzw. "without".
+			Ausserdem:
+			Ist CodeTestSwitch = false wird der getrackte Code von der rechten in die linke
+			TextArea "geschoben", bis ein counter, der vor jedem "Schieben" um 1 erhöht wird
+			den wert main.MyProgress.getCodeSize() - 1 erreicht. Ist dies der Fall so wird
+			der Counter um 1 verringert wird der next-Button ge- und der back-Button entsperrt.
+			Ist CodeTestSwitch = true wird der getrackte Test von der rechten in die linke
+			TextArea "geschoben", bis ein counter, der vor jedem "Schieben" um 1 erhöht wird
+			den wert main.MyProgress.getTestSize() - 1 erreicht. Ist dies der Fall so wird
+			der Counter um 1 verringert wird der next-Button ge- und der back-Button entsperrt.
+			
+		back:
+			Ist CodeTestSwitch = false und der Counter > 0 wird der rechten TextArea der Wert von
+			main.MyProgress.getCode(counter) und der linken TextArea der Wert von
+			main.MyProgress.getCode(counter - 1) zugewiesen, der counter wird um 1 verringert und
+			die Funktion des next-Buttons wird wieder aktiviert. Dies geschieht so lange bis der 
+			Counter 0 erreicht, in diesem Fall wird die Funktion des back-Buttons deaktiviert und
+			der Counter wieder um 1 erhoeht.
+			Ist CodeTestSwitch = true und der Counter > 0 wird der rechten TextArea der Wert von
+			main.MyProgress.getTest(counter) und der linken TextArea der Wert von
+			main.MyProgress.getTest(counter - 1) zugewiesen, der counter wird um 1 verringert und
+			die Funktion des next-Buttons wird wieder aktiviert. Dies geschieht so lange bis der 
+			Counter 0 erreicht, in diesem Fall wird die Funktion des back-Buttons deaktiviert und
+			der Counter wieder um 1 erhoeht.			
+	
+	
+	
+ 
+ 
