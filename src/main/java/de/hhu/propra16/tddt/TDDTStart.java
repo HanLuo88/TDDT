@@ -8,17 +8,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
 /**
  * Main class of TDDT, loads the root layout from TextScreen.fxml
  * defines the title and shows the Stage.
+ * 
  * @author group pwnyhof
  *
  */
-public class TDDTStart extends Application {
+public class TDDTStart extends Application
+{
 
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws Exception
+	{
 
-		try {
+		try
+		{
 
 			// Load root layout from fxml file.
 			BorderPane base = FXMLLoader.load(getClass().getResource("/TextScreen.fxml"));
@@ -31,12 +36,15 @@ public class TDDTStart extends Application {
 
 			primaryStage.show();
 
-		} catch (IOException e) {
+		}
+		catch(IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 
 		launch(args);
 	}

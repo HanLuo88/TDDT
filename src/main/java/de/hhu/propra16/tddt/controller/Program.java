@@ -18,15 +18,17 @@ import vk.core.api.TestFailure;
 import vk.core.api.TestResult;
 import vk.core.internal.InternalCompiler;
 
-public class Program {
-	private TextArea console;
-	private CompilerResult result = null;
-	private TestResult testResult = null;
-	private Information info;
-	private Path codeFilePath;
-	private Path testFilePath;
+public class Program
+{
+	private TextArea		console;
+	private CompilerResult	result		= null;
+	private TestResult		testResult	= null;
+	private Information		info;
+	private Path			codeFilePath;
+	private Path			testFilePath;
 
-	public Program(Information info, TextArea console) {
+	public Program(Information info, TextArea console)
+	{
 		this.info = info;
 		this.console = console;
 		this.codeFilePath = Paths.get(info.getPathToFiles() + info.getCodeFileName() + ".java");
@@ -34,34 +36,42 @@ public class Program {
 
 	}
 
-	
-	public void compile() {
+	public void compile()
+	{
 		// Compiliert das Programm NICHT imaginär
 		Process processCompile = null;
-		try {
+		try
+		{
 			processCompile = Runtime.getRuntime().exec("javac " + codeFilePath);
-		} catch (IOException e1) {
+		}
+		catch(IOException e1)
+		{
 			e1.printStackTrace();
 		}
 
 		// Solange compiliert wird: WARTEN!
-		while (processCompile.isAlive()) {
+		while(processCompile.isAlive())
+		{
 
 		}
 
 		// Liest Programm aus einer Datei
 		List<String> content;
-		try {
+		try
+		{
 			content = Files.readAllLines(codeFilePath);
 
-		} catch (IOException e) {
+		}
+		catch(IOException e)
+		{
 			System.out.println("ERROR: File Path Not Found!");
 			return;
 		}
 
 		// Wandelt den Quellcode in einen String um
 		String contentS = "";
-		for (int i = 0; i < content.size(); i++) {
+		for(int i = 0; i < content.size(); i++)
+		{
 			contentS = contentS + content.get(i);
 		}
 		// Erstellt eine CompilationUnit mit den vorangegangenen Daten
@@ -80,55 +90,73 @@ public class Program {
 		error.toArray(array);
 
 		// Gibt Errors aus
-		for (int i = 0; i < array.length; i++) {
+		for(int i = 0; i < array.length; i++)
+		{
 			console.setText(console.getText() + array[i].toString() + "\n");
 		}
 	}
-/**
- * run method (button in the bottom left corner from the GUI)
- * @param args gives the possibility to run a code with parameters like you can do on terminal
- * runs the program when there are no errors within compilation
- */
-	public void run(String args) {
-		if (result != null && !result.hasCompileErrors()) {
+
+	/**
+	 * run method (button in the bottom left corner from the GUI)
+	 * 
+	 * @param args
+	 *            gives the possibility to run a code with parameters like you can do on terminal
+	 *            runs the program when there are no errors within compilation
+	 */
+	public void run(String args)
+	{
+		if(result != null && !result.hasCompileErrors())
+		{
 			Process processRun = null;
-			try {
+			try
+			{
 				processRun = Runtime.getRuntime()
-						.exec("java -cp " + info.getPathToFiles() + " " + info.getCodeFileName() + args);
-			} catch (Exception e) {
+				        .exec("java -cp " + info.getPathToFiles() + " " + info.getCodeFileName() + args);
+			}
+			catch(Exception e)
+			{
 				e.printStackTrace();
 			}
-			try {
+			try
+			{
 				println(processRun.getInputStream());
 				println(processRun.getErrorStream());
 
-			} catch (Exception e1) {
+			}
+			catch(Exception e1)
+			{
 				e1.printStackTrace();
 			}
 		}
 	}
 
-	public int test() {
+	public int test()
+	{
 		// Liest Programm aus einer Datei
 		List<String> contentTest;
 		List<String> contentCode;
-		try {
+		try
+		{
 			contentTest = Files.readAllLines(testFilePath);
 			contentCode = Files.readAllLines(codeFilePath);
 
-		} catch (IOException e) {
+		}
+		catch(IOException e)
+		{
 			System.out.println("ERROR: File Path Not Found!");
 			return -1;
 		}
 
 		// Wandelt den Testcode in einen String um
 		String contentTestInString = "";
-		for (int i = 0; i < contentTest.size(); i++) {
+		for(int i = 0; i < contentTest.size(); i++)
+		{
 			contentTestInString = contentTestInString + contentTest.get(i);
 		}
 
 		String contentCodeInString = "";
-		for (int i = 0; i < contentCode.size(); i++) {
+		for(int i = 0; i < contentCode.size(); i++)
+		{
 			contentCodeInString = contentCodeInString + contentCode.get(i);
 		}
 
@@ -150,7 +178,8 @@ public class Program {
 		errorCode.toArray(arrayCode);
 
 		// Gibt Errors aus
-		for (int i = 0; i < arrayCode.length; i++) {
+		for(int i = 0; i < arrayCode.length; i++)
+		{
 			console.setText(console.getText() + arrayCode[i].toString() + "\n");
 		}
 
@@ -160,40 +189,47 @@ public class Program {
 		errorTest.toArray(arrayTest);
 
 		// Gibt Errors aus
-		for (int i = 0; i < arrayTest.length; i++) {
+		for(int i = 0; i < arrayTest.length; i++)
+		{
 			console.setText(console.getText() + arrayTest[i].getMessage() + "\n");
 		}
-		
+
 		int numberFailed = testResult.getNumberOfFailedTests();
-		
-		if (numberFailed == 0) {
+
+		if(numberFailed == 0)
+		{
 			Duration testDur = testResult.getTestDuration();
 			testDur.toString();
 			System.out.println(testDur + "\n" + "All tests succesfull! Congratulations!");
-			if(numberFailed == 0) {
+			if(numberFailed == 0)
+			{
 				return 0;
 			}
 		}
-		if (numberFailed != 0) {
+		if(numberFailed != 0)
+		{
 			int numberIgn = testResult.getNumberOfIgnoredTests();
 			int numberSuccess = testResult.getNumberOfSuccessfulTests();
 			Duration testDur = testResult.getTestDuration();
 			testDur.toString();
 			System.out.println(testDur + "\n" + "Number of failed tests: " + numberFailed + "\n"
-					+ "Number of ignored tests: " + numberIgn + "\n" + "Number of successful tests: " + numberSuccess);
-			
-			if(numberFailed == 1) {
+			        + "Number of ignored tests: " + numberIgn + "\n" + "Number of successful tests: " + numberSuccess);
+
+			if(numberFailed == 1)
+			{
 				return 1;
 			}
 		}
-		
+
 		return -1;
 	}
 
-	private void println(InputStream inStream) throws Exception {
+	private void println(InputStream inStream) throws Exception
+	{
 		String line = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
-		while ((line = in.readLine()) != null) {
+		while((line = in.readLine()) != null)
+		{
 			System.out.println(line);
 		}
 	}

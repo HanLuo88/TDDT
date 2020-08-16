@@ -5,9 +5,11 @@ import org.junit.Test;
 import de.hhu.propra16.tddt.controller.MainScreenController;
 import de.hhu.propra16.tddt.controller.Timer;
 
-public class TimerTest {
+public class TimerTest
+{
 	@Test
-	public void resetTimer() {
+	public void resetTimer()
+	{
 
 		MainScreenController con = new MainScreenController();
 		long babystepDuration = 15;
@@ -19,7 +21,8 @@ public class TimerTest {
 	}
 
 	@Test
-	public void startTimer() {
+	public void startTimer()
+	{
 
 		MainScreenController con = new MainScreenController();
 		long babystepDuration = 15;
@@ -29,34 +32,38 @@ public class TimerTest {
 
 		assertEquals(testTimer.startTimer(), start);
 	}
-	
+
 	@Test
-	public void stopTimer(){
+	public void stopTimer()
+	{
 		MainScreenController con = new MainScreenController();
 		long babystepDuration = 15;
 		Timer testTimer = new Timer(con, babystepDuration);
-		
-		
+
 		assertEquals(false, testTimer.stopTimer());
 	}
+
 	@Test
-	public void timePassed() throws InterruptedException{
+	public void timePassed() throws InterruptedException
+	{
 		MainScreenController con = new MainScreenController();
 		long babystepDuration = 15;
 		Timer testTimer = new Timer(con, babystepDuration);
-		
+
 		testTimer.startTimer();
 		testTimer.stopTimer();
-		
+
 		assertEquals(testTimer.getTime(), testTimer.timePassed());
-		
+
 	}
+
 	@Test
-	public void setAndGetTime(){
+	public void setAndGetTime()
+	{
 		MainScreenController con = new MainScreenController();
 		long babystepDuration = 15;
 		Timer testTimer = new Timer(con, babystepDuration);
-		
+
 		testTimer.setTime(5000);
 		assertEquals(5000, testTimer.getTime());
 	}

@@ -1,25 +1,33 @@
 package de.hhu.propra16.tddt.controller;
 
-	/**
-	 * The Timer Class from TDDT project
-	 * contains some variables for time management
-	 * @author group pwnyhof
-	 * @param startTime long type, Time to start with
-	 * @param endTime long type, Time at the end
-	 * @param timerRuns (true if it runs or false if not)
-	 * @param controller a new MainScreenController
-	 * @param t a Thread to handle the running timer
-	 * @param timePassed used in method timePassed() to store the passed time
-	 */
-public class Timer {
+/**
+ * The Timer Class from TDDT project
+ * contains some variables for time management
+ * 
+ * @author group pwnyhof
+ * @param startTime
+ *            long type, Time to start with
+ * @param endTime
+ *            long type, Time at the end
+ * @param timerRuns
+ *            (true if it runs or false if not)
+ * @param controller
+ *            a new MainScreenController
+ * @param t
+ *            a Thread to handle the running timer
+ * @param timePassed
+ *            used in method timePassed() to store the passed time
+ */
+public class Timer
+{
 
-	private long startTime;
-	private long endTime;
-	private volatile boolean timerRuns = true;
-	private MainScreenController controller;
-	private Thread t;
-	private long timePassed;
-	private final long babystepDuration;
+	private long					startTime;
+	private long					endTime;
+	private volatile boolean		timerRuns	= true;
+	private MainScreenController	controller;
+	private Thread					t;
+	private long					timePassed;
+	private final long				babystepDuration;
 
 	/**
 	 * as long as timerRuns is true and timePassed is below 15000(milliseconds)
@@ -29,18 +37,24 @@ public class Timer {
 	 * gets unlocked Then the current Thread is interrupted then the Thread
 	 * starts again.
 	 * 
-	 * @param con is a new MainScreenController aka. a new GUI window from TDDT
+	 * @param con
+	 *            is a new MainScreenController aka. a new GUI window from TDDT
 	 */
-	public Timer(MainScreenController con, long babystepDuration) {
+	public Timer(MainScreenController con, long babystepDuration)
+	{
 		this.controller = con;
 		this.babystepDuration = babystepDuration;
 		startTimer();
 
-		t = new Thread(new Runnable() {
+		t = new Thread(new Runnable()
+		{
 			@Override
-			public void run() {
-				while (timerRuns) {
-					if (timePassed() >= babystepDuration) {
+			public void run()
+			{
+				while(timerRuns)
+				{
+					if(timePassed() >= babystepDuration)
+					{
 						timerRuns = false;
 						controller.timerLapsed();
 					}
@@ -56,7 +70,8 @@ public class Timer {
 	 * by setting timerRuns 'true'
 	 * 
 	 */
-	public long startTimer() {
+	public long startTimer()
+	{
 		startTime = System.currentTimeMillis();
 		timerRuns = true;
 		return startTime;
@@ -68,12 +83,16 @@ public class Timer {
 	 * @return this.timePassed: passed time as it's the difference between
 	 *         endTime & 0: if something went wrong
 	 */
-	public long timePassed() {
+	public long timePassed()
+	{
 		endTime = System.currentTimeMillis();
-		try {
+		try
+		{
 			this.timePassed = endTime - startTime;
 			return this.timePassed;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			System.out.println("Timer Error!");
 		}
 		return 0;
@@ -82,7 +101,8 @@ public class Timer {
 	/**
 	 * stops the timer by changing value of timerRuns
 	 */
-	public boolean stopTimer() {
+	public boolean stopTimer()
+	{
 		timerRuns = false;
 		return timerRuns;
 	}
@@ -91,7 +111,8 @@ public class Timer {
 	 * resets the Timer for next use by switching both values of startTime &
 	 * endTime to 0
 	 */
-	public long resetTimer() {
+	public long resetTimer()
+	{
 		startTime = 0;
 		endTime = 0;
 		return endTime + startTime;
@@ -104,7 +125,8 @@ public class Timer {
 	 *            is a value in milliseconds you want to set the timer to
 	 * @return the now changed value of timePassed
 	 */
-	public long setTime(long timePassed) {
+	public long setTime(long timePassed)
+	{
 		this.timePassed = timePassed;
 		return timePassed;
 	}
@@ -114,7 +136,8 @@ public class Timer {
 	 * 
 	 * @return the value of timePassed
 	 */
-	public long getTime() {
+	public long getTime()
+	{
 		return timePassed;
 	}
 }

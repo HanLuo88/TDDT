@@ -14,37 +14,39 @@ import javafx.scene.control.TextArea;
  * @author group pwnyhof
  *
  */
-public class TrackingScreenController {
+public class TrackingScreenController
+{
 
-	private MainScreenController main;
-	private boolean CodeTestSwitch = true; // code - false, test - true
-	private int counter = 1;
-
-	@FXML
-	public TextArea TALeft;
+	private MainScreenController	main;
+	private boolean					CodeTestSwitch	= true;	// code - false, test - true
+	private int						counter			= 1;
 
 	@FXML
-	public TextArea TARight;
+	public TextArea					TALeft;
 
 	@FXML
-	public Button code;
+	public TextArea					TARight;
 
 	@FXML
-	public Button test;
+	public Button					code;
 
 	@FXML
-	public Button back;
+	public Button					test;
 
 	@FXML
-	public Button next;
+	public Button					back;
 
 	@FXML
-	public Label timeLeft;
+	public Button					next;
 
 	@FXML
-	public Label timeRight;
+	public Label					timeLeft;
 
-	public void setMain(MainScreenController main) {
+	@FXML
+	public Label					timeRight;
+
+	public void setMain(MainScreenController main)
+	{
 		this.main = main;
 
 	}
@@ -59,13 +61,16 @@ public class TrackingScreenController {
 	 *             be done next based on which button was clicked
 	 */
 	@FXML
-	public void handleButton(ActionEvent e) throws IOException {
+	public void handleButton(ActionEvent e) throws IOException
+	{
 
-		if (e.getSource() == test) {
+		if(e.getSource() == test)
+		{
 			defaultTest();
 		}
 
-		if (e.getSource() == code) {
+		if(e.getSource() == code)
+		{
 			defaultCode();
 		}
 		/**
@@ -73,31 +78,38 @@ public class TrackingScreenController {
 		 * CodeTestSwitch is true or not
 		 */
 
-		if (e.getSource() == next) {
-			if (!CodeTestSwitch) { // FALSE IST CODE
-				if (counter < main.MyProgress.getCodeSize()) {
+		if(e.getSource() == next)
+		{
+			if(!CodeTestSwitch)
+			{ // FALSE IST CODE
+				if(counter < main.MyProgress.getCodeSize())
+				{
 					counter++;
 					TALeft.setText(TARight.getText());
 					timeLeft.setText(timeRight.getText());
 					TARight.setText(main.MyProgress.getCode(counter));
 					String s = String.valueOf(main.MyProgress.getCodeTime(counter) / 1000);
 					timeRight.setText(s + "s");
-					if (counter == main.MyProgress.getCodeSize()) {
+					if(counter == main.MyProgress.getCodeSize())
+					{
 						counter--;
 						next.setDisable(true);
 					}
 					back.setDisable(false);
 				}
 			}
-			if (CodeTestSwitch) { // TRUE IST TEST
-				if (counter < main.MyProgress.getTestSize()) {
+			if(CodeTestSwitch)
+			{ // TRUE IST TEST
+				if(counter < main.MyProgress.getTestSize())
+				{
 					counter++;
 					TALeft.setText(TARight.getText());
 					timeLeft.setText(timeRight.getText());
 					TARight.setText(main.MyProgress.getTest(counter));
 					String s = String.valueOf(main.MyProgress.getTestTime(counter) / 1000);
 					timeRight.setText(s + "s");
-					if (counter == main.MyProgress.getTestSize() - 1) {
+					if(counter == main.MyProgress.getTestSize() - 1)
+					{
 						counter--;
 						next.setDisable(true);
 					}
@@ -112,8 +124,10 @@ public class TrackingScreenController {
 		 * for e == back there are two possible cases to handle depending if
 		 * CodeTestSwitch is true or not
 		 */
-		if (e.getSource() == back) {
-			if (CodeTestSwitch && counter > 0) { // Test
+		if(e.getSource() == back)
+		{
+			if(CodeTestSwitch && counter > 0)
+			{ // Test
 				TARight.setText(main.MyProgress.getTest(counter));
 				TALeft.setText(main.MyProgress.getTest(counter - 1));
 
@@ -122,12 +136,14 @@ public class TrackingScreenController {
 
 				counter--;
 				next.setDisable(false);
-				if (counter == 0) {
+				if(counter == 0)
+				{
 					back.setDisable(true);
 					counter++;
 				}
 			}
-			if (!CodeTestSwitch && counter > 0) { // Code
+			if(!CodeTestSwitch && counter > 0)
+			{ // Code
 				TARight.setText(main.MyProgress.getCode(counter));
 				TALeft.setText(main.MyProgress.getCode(counter - 1));
 
@@ -136,15 +152,17 @@ public class TrackingScreenController {
 
 				counter--;
 				next.setDisable(false);
-				if (counter == 0) {
+				if(counter == 0)
+				{
 					back.setDisable(true);
 					counter++;
 				}
 			}
-		} 
+		}
 	}
 
-	public void defaultTest() {
+	public void defaultTest()
+	{
 		next.setDisable(true);
 		back.setDisable(true);
 		timeLeft.setText("");
@@ -153,27 +171,34 @@ public class TrackingScreenController {
 		CodeTestSwitch = true;
 		TALeft.setText("");
 		TARight.setText("");
-		if (main.MyProgress.getTestSize() > 2)
+		if(main.MyProgress.getTestSize() > 2)
 			next.setDisable(false);
 
-		try {
+		try
+		{
 			TALeft.setText(main.MyProgress.getTest(0));
 			String s = String.valueOf(main.MyProgress.getTestTime(0) / 1000);
 			timeLeft.setText(s + "s");
-		} catch (IndexOutOfBoundsException e1) {
+		}
+		catch(IndexOutOfBoundsException e1)
+		{
 			System.out.println("Test[0] does not exist");
 		}
 
-		try {
+		try
+		{
 			TARight.setText(main.MyProgress.getTest(1));
 			String s = String.valueOf(main.MyProgress.getTestTime(1) / 1000);
 			timeRight.setText(s + "s");
-		} catch (IndexOutOfBoundsException e2) {
+		}
+		catch(IndexOutOfBoundsException e2)
+		{
 			System.out.println("Test[1] does not exist");
 		}
 	}
 
-	public void defaultCode() {
+	public void defaultCode()
+	{
 		next.setDisable(true);
 		back.setDisable(true);
 		timeLeft.setText("");
@@ -182,22 +207,28 @@ public class TrackingScreenController {
 		CodeTestSwitch = false;
 		TALeft.setText("");
 		TARight.setText("");
-		if (main.MyProgress.getCodeSize() > 2)
+		if(main.MyProgress.getCodeSize() > 2)
 			next.setDisable(false);
 
-		try {
+		try
+		{
 			TALeft.setText(main.MyProgress.getCode(0));
 			String s = String.valueOf(main.MyProgress.getCodeTime(0) / 1000);
 			timeLeft.setText(s + "s");
-		} catch (IndexOutOfBoundsException e1) {
+		}
+		catch(IndexOutOfBoundsException e1)
+		{
 			System.out.println("Code[0] does not exist");
 		}
 
-		try {
+		try
+		{
 			TARight.setText(main.MyProgress.getCode(1));
 			String s = String.valueOf(main.MyProgress.getCodeTime(1) / 1000);
 			timeRight.setText(s + "s");
-		} catch (IndexOutOfBoundsException e2) {
+		}
+		catch(IndexOutOfBoundsException e2)
+		{
 			System.out.println("Code[1] does not exist");
 		}
 	}
